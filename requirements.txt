@@ -1,1 +1,6 @@
-streamlit>=1.26.0
+streamlit
+pandas
+numpy
+xgboost
+scikit-learn
+matplotlib
