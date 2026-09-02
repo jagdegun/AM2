@@ -17,7 +17,7 @@ month_order = {'January':1, 'February':2, 'March':3, 'April':4, 'May':5, 'June':
 df = pd.read_csv("data/am2_2025_data.csv")
 
 st.write("### 2025 data preview")
-st.dataframe(df.head())
+st.dataframe(df.drop(columns=['Full Name']))
 
 # ---------- Aggregate to office level ----------
 def aggregate_office(data):
