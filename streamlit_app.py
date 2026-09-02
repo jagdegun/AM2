@@ -148,57 +148,5 @@ try:
     st.dataframe(eval_df[['Office', 'Month', 'predicted_utilisation_rate',
                            'actual_utilisation_rate', 'error', 'pct_error']])
 
-    # ---------- Monitoring dashboard ----------
-    st.write("### Model Monitoring Dashboard")
-
-    fig, axes = plt.subplots(2, 2, figsize=(14, 10))
-
-    months_seen = [m for m in future_months if m in eval_df['Month'].unique()]
-    cumulative_mape, monthly_mape = [], []
-    for i, month in enumerate(months_seen):
-        subset = eval_df[eval_df['Month'].isin(months_seen[:i+1])]
-        cumulative_mape.append(subset['pct_error'].mean())
-        monthly_mape.append(eval_df[eval_df['Month'] == month]['pct_error'].mean())
-
-    ax1 = axes[0, 0]
-    x = range(len(months_seen))
-    ax1.plot(x, monthly_mape, marker='o', label='Monthly MAPE', color='#FF5722')
-    ax1.plot(x, cumulative_mape, marker='s', linestyle='--', label='Cumulative MAPE', color='#2196F3')
-    ax1.axhline(y=10, color='red', linestyle=':', alpha=0.7, label='10% threshold')
-    ax1.set_xticks(x); ax1.set_xticklabels(months_seen, rotation=45)
-    ax1.set_title('MAPE Over Time'); ax1.legend(); ax1.grid(alpha=0.3)
-
-    ax2 = axes[0, 1]
-    for office in sorted(eval_df['Office'].unique()):
-        od = eval_df[eval_df['Office'] == office].copy()
-        od['m'] = od['Month'].map({m: i for i, m in enumerate(months_seen)})
-        od = od.sort_values('m')
-        ax2.plot(range(len(od)), od['error'] * 100, marker='o', label=office)
-    ax2.axhline(y=0, color='black', linewidth=1)
-    ax2.set_xticks(range(len(months_seen))); ax2.set_xticklabels(months_seen, rotation=45)
-    ax2.set_title('Prediction Error Drift by Office'); ax2.legend(fontsize=8); ax2.grid(alpha=0.3)
-
-    ax3 = axes[1, 0]
-    monthly_avg = eval_df.groupby('Month').agg(
-        Predicted=('predicted_utilisation_rate', 'mean'), Actual=('actual_utilisation_rate', 'mean')
-    ).reindex(months_seen)
-    x = range(len(months_seen))
-    ax3.plot(x, monthly_avg['Actual']*100, marker='o', label='Actual', color='#2196F3')
-    ax3.plot(x, monthly_avg['Predicted']*100, marker='s', linestyle='--', label='Predicted', color='#FF5722')
-    ax3.fill_between(x, monthly_avg['Actual']*100, monthly_avg['Predicted']*100, alpha=0.15, color='red')
-    ax3.set_xticks(x); ax3.set_xticklabels(months_seen, rotation=45)
-    ax3.set_title('Avg Utilisation: Predicted vs Actual'); ax3.legend(); ax3.grid(alpha=0.3)
-
-    ax4 = axes[1, 1]
-    office_mape = eval_df.groupby('Office')['pct_error'].mean().sort_values()
-    colours = ['#4CAF50' if v < 10 else '#FF9800' if v < 15 else '#F44336' for v in office_mape.values]
-    ax4.barh(office_mape.index, office_mape.values, color=colours)
-    ax4.axvline(x=10, color='orange', linestyle='--', alpha=0.7)
-    ax4.axvline(x=15, color='red', linestyle='--', alpha=0.7)
-    ax4.set_title('Model Accuracy by Office (MAPE)'); ax4.grid(alpha=0.3, axis='x')
-
-    plt.tight_layout()
-    st.pyplot(fig)
-
 except FileNotFoundError:
     st.info("Upload `data/am2_2026_actuals.csv` to see prediction-vs-actual comparison and the monitoring dashboard.")
