@@ -72,7 +72,7 @@ cv_scores = cross_val_score(model, X, y, cv=tscv, scoring='neg_mean_absolute_err
 model.fit(X, y)
 
 st.write("### Cross-validation performance (2025 data)")
-st.write(f"Average CV MAE: **{-cv_scores.mean()*100:.1f}%** utilisation rate")
+st.write(f"Average CV MAE (Mean Absolute Error): **{-cv_scores.mean()*100:.1f}%** utilisation rate")
 
 # ---------- Generate 2026 predictions ----------
 future_months = ['January', 'February', 'March', 'April', 'May', 'June', 'July']
@@ -132,9 +132,9 @@ try:
     mape = eval_df['pct_error'].mean()
 
     col1, col2, col3 = st.columns(3)
-    col1.metric("MAE", f"{mae*100:.1f}%")
-    col2.metric("RMSE", f"{rmse*100:.1f}%")
-    col3.metric("MAPE", f"{mape:.1f}%")
+    col1.metric("MAE (Mean Absolute Error)", f"{mae*100:.1f}%")
+    col2.metric("RMSE (Root Mean Squared Error)", f"{rmse*100:.1f}%")
+    col3.metric("MAPE (Mean Absolute Percentage Error)", f"{mape:.1f}%")
 
     st.write("#### Performance by office")
     office_metrics = eval_df.groupby('Office').agg(
