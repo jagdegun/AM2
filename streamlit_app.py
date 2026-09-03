@@ -10,7 +10,7 @@ from sklearn.preprocessing import LabelEncoder
 st.set_page_config(page_title="AM2 Office Attendance Prediction", layout="wide")
 st.title("AM2 Project: Office Attendance Prediction")
 
-"A supervised regression model as it was trained on historical data and regression predicts a continuous numerical value."
+"A supervised regression model trained on historical data and regression predicting a continuous numerical value."
 
 month_order = {'January':1, 'February':2, 'March':3, 'April':4, 'May':5, 'June':6,
                'July':7, 'August':8, 'September':9, 'October':10, 'November':11, 'December':12}
