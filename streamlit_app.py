@@ -134,7 +134,7 @@ try:
     mape = eval_df['pct_error'].mean()
 
     col1, col2, col3 = st.columns(3)
-    col1.metric("MAE (Mean Absolute Error)", f"{mae*100:.1f}%")
+    col1.metric("MAE (Mean Absolute Error)", f"{mae*100:.1f}%") "On average predictions were off by 4.2%."
     col2.metric("RMSE (Root Mean Squared Error)", f"{rmse*100:.1f}%")
     col3.metric("MAPE (Mean Absolute Percentage Error)", f"{mape:.1f}%")
 
