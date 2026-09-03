@@ -116,6 +116,9 @@ st.dataframe(predictions_df[['Office', 'Month', 'predicted_utilisation_rate']])
 
 # ---------- Load 2026 actuals and evaluate ----------
 st.write("### Prediction vs Actual (2026)")
+"MAE - Seeing the difference between what the model predicted and what actually happened"
+"RMSE - This penalises large errors similar to MAE"
+"MAPE - It expresses error as a percentage"
 
 try:
     actuals_df = pd.read_csv("data/am2_2026_actuals.csv")
